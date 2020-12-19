@@ -1,4 +1,5 @@
 open System
+open Day01.Input
 
 let rec pairs l =
     match l with
