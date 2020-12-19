@@ -1,5 +1,5 @@
 [<AutoOpen>]
-module Input
+module Day01.Input
 
 open System
 
