@@ -25,16 +25,21 @@ let map =  lines
 let width = lines.[0].Length
 let height = lines.Length
 
-let ys = [0..height-1]
-let xs = [0..height-1] |> List.map (fun y -> y * 3 % width)
+let treesHit (right,down) =
+    let ys = [0..down..height-1]
+    let xs = [0..(ys.Length-1)] |> List.map (fun y -> y * right % width)
 
-let positions = List.zip xs ys
+    let positions = List.zip xs ys
 
-let trees = positions |> List.map (fun p -> map.Item p) |> List.choose (function Tree -> Some Tree | _ -> None)
+    let trees = positions |> List.map (fun p -> map.Item p) |> List.choose (function Tree -> Some Tree | _ -> None)
 
-let treeNumber = trees.Length
+    trees.Length
+let partTwo = [(1,1); (3,1); (5,1); (7,1); (1,2)]
+                |> List.map treesHit
+                |> List.fold (*) 1
 
 [<EntryPoint>]
 let main argv =
-    printfn $"Part One: {treeNumber}"
+    printfn $"Part One: {treesHit (3,1)}"
+    printfn $"Part Two: {partTwo}"
     0
