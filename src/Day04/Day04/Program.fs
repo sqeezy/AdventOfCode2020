@@ -12,7 +12,7 @@ let rec splitOn elem arr =
         let (a, rem) = arr |> List.splitAt (i+1)
         let skipElem = List.take (a.Length-1) a
         skipElem :: splitOn elem rem
-    | None -> []
+    | None -> [arr]
 
 
 let test p str =
@@ -75,9 +75,8 @@ let partOneLogic =  splitAtLinebreak
                         >> List.choose (function true -> Some 0 | _ -> None)
                         >> List.length
 
-partOneLogic testInput
-partOneLogic input
-
 [<EntryPoint>]
 let main argv =
+    printfn $"Test Input:\t{partOneLogic testInput}"
+    printfn $"Part One:\t{partOneLogic input}"
     0 // return an integer exit code
