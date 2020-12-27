@@ -2,6 +2,9 @@
 open Day04.Input
 open FParsec
 
+let splitAtLinebreak (s:string) =
+    s.Split '\n'
+
 let rec splitOn elem arr =
     let index = List.tryFindIndex elem arr
     match index with
@@ -40,7 +43,7 @@ hgt:185cm
 pid:646234624 cid:234
 hgt:185cm"
 
-let manyPassports = sepBy passport (skipNewline .>> skipNewline .>> skipNewline)
+let manyPassports = sepBy passport (skipNewline)
 
 test manyPassports @"pid:646234624 cid:234
 hgt:185cm
@@ -48,7 +51,7 @@ hgt:185cm
 pid:646234624 cid:234
 hgt:185cm"
 
-let input = @"ecl:gry pid:860033327 eyr:2020 hcl:#fffffd
+let testInput = @"ecl:gry pid:860033327 eyr:2020 hcl:#fffffd
 byr:1937 iyr:2017 cid:147 hgt:183cm
 
 iyr:2013 ecl:amb cid:350 eyr:2023 pid:028048884
@@ -62,15 +65,18 @@ hgt:179cm
 hcl:#cfa07d eyr:2025 pid:166559648
 iyr:2011 ecl:brn hgt:59in"
 
-let passportFields = input.Split '\n'
-                        |> List.ofArray
-                        |> splitOn ((=)"")
-                        |> List.map (String.concat " ")
-                        |> List.map (run passport)
-                        |> List.choose (function Success(list, _, _) -> Some list | _ -> None)
-                        |> List.map (fun list -> neededFields |> List.forall (fun need -> List.contains need list))
-                        |> List.choose (function true -> Some 0 | _ -> None)
-                        |> List.length
+let partOneLogic =  splitAtLinebreak
+                        >> List.ofArray
+                        >> splitOn ((=)"")
+                        >> List.map (String.concat " ")
+                        >> List.map (run passport)
+                        >> List.choose (function Success(list, _, _) -> Some list | _ -> None)
+                        >> List.map (fun list -> neededFields |> List.forall (fun need -> List.contains need list))
+                        >> List.choose (function true -> Some 0 | _ -> None)
+                        >> List.length
+
+partOneLogic testInput
+partOneLogic input
 
 [<EntryPoint>]
 let main argv =
